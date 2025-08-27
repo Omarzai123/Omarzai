@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Exchange App</title>
+    <!-- Material UI -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Material UI -->
+    <script src="https://unpkg.com/@mui/material@5.11.12/umd/material-ui.development.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .money-exchange-app {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .app-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .app-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .app-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .app-content {
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        @media (max-width: 768px) {
+            .app-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .converter-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .input-field, .select-field {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .input-field:focus, .select-field:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .swap-button {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .swap-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .swap-btn:hover {
+            background: #2980b9;
+        }
+        
+        .convert-button {
+            width: 100%;
+            padding: 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        .convert-button:hover {
+            background: #2980b9;
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f4fc;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .result h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .result-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3498db;
+        }
+        
+        .rate {
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .historical-rates, .latest-rates, .rate-history {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .historical-rates h2, .latest-rates h2, .rate-history h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .date-selector {
+            margin-bottom: 15px;
+        }
+        
+        .historical-result {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .rate-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3498db;
+            margin-top: 10px;
+        }
+        
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .currency-code {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .chart-container {
+            height: 200px;
+            margin-top: 15px;
+        }
+        
+        .app-footer {
+            padding: 15px 25px;
+            background: #f8f9fa;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 12px;
+            border-top: 1px solid #ddd;
+        }
+        
+        .mui-container {
+            padding: 20px;
+        }
+        
+        .mui-paper {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mui-typography-h5 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .mui-typography-subtitle1 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .mui-textfield {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .mui-toggle-button-group {
+            margin-bottom: 15px;
+        }
+        
+        .mui-divider {
+            margin: 15px 0;
+            border-top: 1px solid #ddd;
+        }
+        
+        .mui-circular-progress {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .mui-grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .mui-grid-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+        const { 
+            Box, Typography, Paper, TextField, CircularProgress, Grid, ToggleButton, 
+            ToggleButtonGroup, Divider, Container
+        } = MaterialUI;
+
+        
+        const CurrencyContext = createContext();
+
+        
+        function CurrencyProvider({ children }) {
+            const [base, setBase] = useState('USD');
+            const [quote, setQuote] = useState('EUR');
+            const [amount, setAmount] = useState(1);
+            const [convertedAmount, setConvertedAmount] = useState(null);
+            const [exchangeRates, setExchangeRates] = useState({});
+            const [historicalRates, setHistoricalRates] = useState({});
+            const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+
+            
+            useEffect(() => {
+                
+                const mockRates = {
+                    USD: 1,
+                    EUR: 0.93,
+                    GBP: 0.80,
+                    JPY: 147.66,
+                    CAD: 1.36,
+                    AUD: 1.54,
+                    CHF: 0.88,
+                    CNY: 7.30,
+                    INR: 83.37,
+                    AFN: 78.50 // Afghan Afghani
+                };
+                setExchangeRates(mockRates);
+                
+               
+                setHistoricalRates(mockRates);
+            }, []);
+
+            
+            const convertCurrency = () => {
+                if (!exchangeRates[base] || !exchangeRates[quote]) {
+                    alert('Please select valid currencies');
+                    return;
+                }
+                
+                
+                const amountInUSD = amount / exchangeRates[base];
+                const result = amountInUSD * exchangeRates[quote];
+                
+                setConvertedAmount(result.toFixed(2));
+            };
+
+            const value = {
+                base,
+                setBase,
+                quote,
+                setQuote,
+                amount,
+                setAmount,
+                convertedAmount,
+                setConvertedAmount,
+                exchangeRates,
+                historicalRates,
+                date,
+                setDate,
+                convertCurrency
+            };
+
+            return (
+                <CurrencyContext.Provider value={value}>
+                    {children}
+                </CurrencyContext.Provider>
+            );
+        }
+
+        function useCurrency() {
+            const context = useContext(CurrencyContext);
+            if (!context) {
+                throw new Error('useCurrency must be used within a CurrencyProvider');
+            }
+            return context;
+        }
+
+        
+        function LineChart({ data = [], width = 600, height = 180, strokeWidth = 2 }) {
+            if (!data || data.length === 0) {
+                return (
+                    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height }}>
+                        No data
+                    </Box>
+                );
+            }
+
+            const values = data.map((d) => d.value);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const padding = (max - min) * 0.1 || max * 0.05 || 1;
+            const yMin = min - padding;
+            const yMax = max + padding;
+
+            const points = data.map((d, i) => {
+                const x = (i / (data.length - 1)) * width;
+                const y = ((yMax - d.value) / (yMax - yMin)) * height;
+                return `${x},${y}`;
+            });
+            const polylinePoints = points.join(" ");
+
+            return (
+                <svg viewBox={`0 0 ${width} ${height}`} width="100%" height={height}>
+                    <polyline
+                        fill="none"
+                        strokeWidth={strokeWidth}
+                        stroke="currentColor"
+                        points={polylinePoints}
+                    />
+                    {points.map((pt, i) => {
+                        const [x, y] = pt.split(",");
+                        return <circle key={i} cx={x} cy={y} r={1.5} fill="currentColor" />;
+                    })}
+                </svg>
+            );
+        }
+
+        
+        function HistoricalRate() {
+            const { base, quote } = useCurrency();
+            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+            const [dateRate, setDateRate] = useState(null);
+            const [loading, setLoading] = useState(false);
+
+            useEffect(() => {
+                if (!base || !quote) return;
+                
+                setLoading(true);
+                
+                setTimeout(() => {
+                    const mockRate = 0.85 + (Math.random() * 0.1 - 0.05); 
+                    setDateRate(mockRate);
+                    setLoading(false);
+                }, 500);
+            }, [selectedDate, base, quote]);
+
+            return (
+                <div className="mui-paper">
+                    <div className="mui-typography-subtitle1">Historical Rate</div>
+                    <div style={{ display: "flex", gap: "15px", marginTop: "15px", alignItems: "center" }}>
+                        <div className="mui-textfield">
+                            <label>Date</label>
+                            <input 
+                                type="date" 
+                                className="input-field"
+                                value={selectedDate} 
+                                onChange={(e) => setSelectedDate(e.target.value)} 
+                            />
+                        </div>
+                        <div>
+                            <div>Rate on {selectedDate}:</div>
+                            {loading ? (
+                                <div className="mui-circular-progress">Loading...</div>
+                            ) : (
+                                <div className="rate-value">{dateRate ? `${dateRate.toFixed(6)} ${quote}` : "-"}</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        
+        function RateHistoryChart() {
+            const { base, quote } = useCurrency();
+            const [historyRange, setHistoryRange] = useState(7);
+            const [historyData, setHistoryData] = useState([]);
+            const [loading, setLoading] = useState(false);
+
+            useEffect(() => {
+                if (!base || !quote) return;
+                
+                setLoading(true);
+                
+                setTimeout(() => {
+                    const mockData = [];
+                    const baseValue = 0.85;
+                    
+                    for (let i = 0; i < historyRange; i++) {
+                        mockData.push({
+                            date: new Date(Date.now() - (historyRange - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                            value: baseValue + (Math.random() * 0.1 - 0.05) // Random values around 0.85
+                        });
+                    }
+                    
+                    setHistoryData(mockData);
+                    setLoading(false);
+                }, 500);
+            }, [base, quote, historyRange]);
+
+            return (
+                <div className="mui-paper">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div className="mui-typography-subtitle1">Rate History ({base} to {quote})</div>
+                        <div className="mui-toggle-button-group">
+                            <button 
+                                onClick={() => setHistoryRange(7)} 
+                                style={{ 
+                                    padding: '5px 10px', 
+                                    margin: '0 2px', 
+                                    backgroundColor: historyRange === 7 ? '#3498db' : '#f8f9fa',
+                                    color: historyRange === 7 ? 'white' : '#2c3e50',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                7d
+                            </button>
+                            <button 
+                                onClick={() => setHistoryRange(30)} 
+                                style={{ 
+                                    padding: '5px 10px', 
+                                    margin: '0 2px', 
+                                    backgroundColor: historyRange === 30 ? '#3498db' : '#f8f9fa',
+                                    color: historyRange === 30 ? 'white' : '#2c3e50',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                30d
+                            </button>
+                            <button 
+                                onClick={() => setHistoryRange(90)} 
+                                style={{ 
+                                    padding: '5px 10px', 
+                                    margin: '0 2px', 
+                                    backgroundColor: historyRange === 90 ? '#3498db' : '#f8f9fa',
+                                    color: historyRange === 90 ? 'white' : '#2c3e50',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                90d
+                            </button>
+                        </div>
+                    </div>
+                    <div className="mui-divider"></div>
+                    {loading ? <div className="mui-circular-progress">Loading...</div> : <LineChart data={historyData} width={600} height={180} />}
+                </div>
+            );
+        }
+
+        function LatestRates() {
+            const { base, exchangeRates } = useCurrency();
+            const [loading, setLoading] = useState(false);
+
+            useEffect(() => {
+                setLoading(true);
+                // Simulate loading
+                setTimeout(() => {
+                    setLoading(false);
+                }, 500);
+            }, [base]);
+
+            return (
+                <div className="mui-paper">
+                    <div className="mui-typography-subtitle1">Latest Rates (Base: {base})</div>
+                    {loading ? (
+                        <div className="mui-circular-progress">Loading...</div>
+                    ) : (
+                        <div className="mui-grid-container">
+                            {exchangeRates && Object.entries(exchangeRates)
+                                .slice(0, 12)
+                                .map(([sym, val]) => (
+                                    <div key={sym} className="mui-grid-item">
+                                        <div>{sym}</div>
+                                        <div>{val.toFixed(6)}</div>
+                                    </div>
+                                ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        
+        function Converter() {
+            const {
+                base,
+                setBase,
+                quote,
+                setQuote,
+                amount,
+                setAmount,
+                convertedAmount,
+                convertCurrency,
+                exchangeRates
+            } = useCurrency();
+
+            const currencies = [
+                { code: 'USD', name: 'US Dollar' },
+                { code: 'EUR', name: 'Euro' },
+                { code: 'GBP', name: 'British Pound' },
+                { code: 'JPY', name: 'Japanese Yen' },
+                { code: 'CAD', name: 'Canadian Dollar' },
+                { code: 'AUD', name: 'Australian Dollar' },
+                { code: 'AFN', name: 'Afghan Afghani' },
+                { code: 'INR', name: 'Indian Rupee' },
+                { code: 'CHF', name: 'Swiss Franc' },
+                { code: 'CNY', name: 'Chinese Yuan' }
+            ];
+
+            return (
+                <div className="converter-panel">
+                    <h2>Currency Converter</h2>
+                    
+                    <div className="input-group">
+                        <label>From</label>
+                        <select 
+                            className="select-field"
+                            value={base} 
+                            onChange={(e) => setBase(e.target.value)}
+                        >
+                            {currencies.map(curr => (
+                                <option key={curr.code} value={curr.code}>
+                                    {curr.code} - {curr.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className="swap-button">
+                        <button 
+                            className="swap-btn"
+                            onClick={() => {
+                                setBase(quote);
+                                setQuote(base);
+                            }}
+                        >
+                            ⇅
+                        </button>
+                    </div>
+                    
+                    <div className="input-group">
+                        <label>To</label>
+                        <select 
+                            className="select-field"
+                            value={quote} 
+                            onChange={(e) => setQuote(e.target.value)}
+                        >
+                            {currencies.map(curr => (
+                                <option key={curr.code} value={curr.code}>
+                                    {curr.code} - {curr.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className="input-group">
+                        <label>Amount</label>
+                        <input 
+                            type="number" 
+                            className="input-field"
+                            value={amount} 
+                            onChange={(e) => setAmount(e.target.value)} 
+                            min="0"
+                        />
+                    </div>
+                    
+                    <button className="convert-button" onClick={convertCurrency}>
+                        Convert
+                    </button>
+                    
+                    {convertedAmount !== null && (
+                        <div className="result">
+                            <h3>Converted Amount</h3>
+                            <p className="result-amount">{convertedAmount} {quote}</p>
+                            <p className="rate">
+                                Rate: 1 {base} = {(convertedAmount / amount).toFixed(6)} {quote}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Main App Component
+        function App() {
+            return (
+                <CurrencyProvider>
+                    <div className="money-exchange-app">
+                        <div className="app-header">
+                            <h1>Money Exchange App</h1>
+                            <p>Fast, Secure & Real-time Currency Conversion</p>
+                        </div>
+                        
+                        <div className="app-content">
+                            <Converter />
+                            
+                            <div className="info-panel">
+                                <HistoricalRate />
+                                <LatestRates />
+                                <RateHistoryChart />
+                            </div>
+                        </div>
+                        
+                        <div className="app-footer">
+                            <p>© 2025 Money Exchange App | Secure Transactions | Real-time Rates</p>
+                        </div>
+                    </div>
+                </CurrencyProvider>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
