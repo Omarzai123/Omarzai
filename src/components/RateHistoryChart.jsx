@@ -3,7 +3,7 @@ import { Box, Typography, Paper, Divider, CircularProgress, ToggleButton, Toggle
 import LineChart from "./LineChart";
 import { useCurrency } from "../context/CurrencyContext";
 
-const API_BASE = "https://api.exchangerate.host";
+const API_BASE = "https://app.exchangerate-api.com/key";
 
 function formatDate(date) {
   return date.toISOString().split('T')[0];
