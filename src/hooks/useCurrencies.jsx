@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const API_BASE = "https://api.exchangerate.host";
+const API_BASE = "https://app.exchangerate-api.com/";
 
 export default function useCurrencies() {
   const [symbols, setSymbols] = useState(null);
