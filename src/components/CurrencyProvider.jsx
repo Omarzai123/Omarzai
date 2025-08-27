@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 // Create Currency Context
 const CurrencyContext = createContext();
 
-// Currency Provider Component
+// components of Currency Provider
 function CurrencyProvider({ children }) {
   const [currency, setCurrency] = useState('USD');
   const [targetCurrency, setTargetCurrency] = useState('EUR');
@@ -14,35 +14,27 @@ function CurrencyProvider({ children }) {
   const [historicalRates, setHistoricalRates] = useState({});
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
-  // Mock API call to get exchange rates
+  
   useEffect(() => {
-    // In a real app, you would fetch this from an API
+    
     const mockRates = {
-      USD: 1,
-      EUR: 0.93,
-      GBP: 0.80,
-      JPY: 147.66,
-      CAD: 1.36,
-      AUD: 1.54,
-      CHF: 0.88,
-      CNY: 7.30,
+      USD: 1
       INR: 83.37,
-      AFN: 78.50 // Afghan Afghani
+      AFN: 68.50//  Afghani
     };
     setExchangeRates(mockRates);
     
-    // Set historical rates (in a real app, you would fetch these by date)
+    // Set historical rates (https://app.exchangerate-api.com/)
     setHistoricalRates(mockRates);
   }, []);
 
-  // Function to convert currency
+  //  convert currency function
   const convertCurrency = () => {
     if (!exchangeRates[currency] || !exchangeRates[targetCurrency]) {
       alert('Please select valid currencies');
       return;
     }
-    
-    // Convert from source currency to USD first, then to target currency
+  
     const amountInUSD = amount / exchangeRates[currency];
     const result = amountInUSD * exchangeRates[targetCurrency];
     
@@ -99,15 +91,8 @@ function CurrencyConverter() {
 
   const currencies = [
     { code: 'USD', name: 'US Dollar' },
-    { code: 'EUR', name: 'Euro' },
-    { code: 'GBP', name: 'British Pound' },
-    { code: 'JPY', name: 'Japanese Yen' },
-    { code: 'CAD', name: 'Canadian Dollar' },
-    { code: 'AUD', name: 'Australian Dollar' },
     { code: 'AFN', name: 'Afghan Afghani' },
     { code: 'INR', name: 'Indian Rupee' },
-    { code: 'CHF', name: 'Swiss Franc' },
-    { code: 'CNY', name: 'Chinese Yuan' }
   ];
 
   return (
