@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, TextField, CircularProgress } from "@mui/material";
 import { useCurrency } from "../context/CurrencyContext";
 
-const API_BASE = "https://api.exchangerate.host";
+const API_BASE = "https://app.exchangerate-api.com/key";
 
 function formatDate(date) {
   return date.toISOString().split('T')[0];
