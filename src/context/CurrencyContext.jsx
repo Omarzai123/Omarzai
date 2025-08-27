@@ -5,7 +5,7 @@ const CurrencyContext = createContext();
 
 export function CurrencyProvider({ children }) {
   const [base, setBase] = useState('USD');
-  const [quote, setQuote] = useState('EUR');
+  const [quote, setQuote] = useState('INR');
   const [amount, setAmount] = useState(1);
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [exchangeRates, setExchangeRates] = useState({});
@@ -22,15 +22,8 @@ export function CurrencyProvider({ children }) {
   useEffect(() => {
     const mockRates = {
       USD: 1,
-      EUR: 0.93,
-      GBP: 0.80,
-      JPY: 147.66,
-      CAD: 1.36,
-      AUD: 1.54,
-      CHF: 0.88,
-      CNY: 7.30,
       INR: 83.37,
-      AFN: 78.50
+      AFN: 68.50
     };
     setExchangeRates(mockRates);
     setHistoricalRates(mockRates);
