@@ -33,7 +33,7 @@ export default function Converter() {
   const [latestRates, setLatestRates] = useState(null);
   const [loadingLatest, setLoadingLatest] = useState(false);
 
-  // Fetch latest rates
+  //  latest rates Fetch
   useEffect(() => {
     let mounted = true;
     setLoadingLatest(true);
