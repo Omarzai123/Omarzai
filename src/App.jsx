@@ -12,7 +12,7 @@ export default function App() {
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Paper sx={{ p: 3 }} elevation={6}>
           <Typography variant="h5" gutterBottom>
-            Money Exchange Rate — React + MUI
+            Money Exchange App
           </Typography>
           <Converter />
           <HistoricalRate />
