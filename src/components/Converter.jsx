@@ -15,7 +15,7 @@ import {
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import { useCurrency } from "../context/CurrencyContext";
 
-const API_BASE = "https://api.exchangerate.host";
+const API_BASE = "https://v6.exchangerate-api.com/v6/ea12f397ed5e93869ccbe0da/latest/USD";
 
 export default function Converter() {
   const { 
