@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, Grid, CircularProgress } from "@mui/material";
 import { useCurrency } from "../context/CurrencyContext";
 
-const API_BASE = "https://api.exchangerate.host";
+const API_BASE = "https://app.exchangerate-api.com/";
 
 export default function LatestRates() {
   const { base } = useCurrency();
